@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fernando Dias | Desenvolvedor Mobile & Professor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --primary-bg: #0f172a;      /* Slate 900 */
+            --card-bg: #1e293b;         /* Slate 800 */
+            --accent: #00e6c3;          /* Teal/Cyan */
+            --accent-glow: rgba(0, 230, 195, 0.2);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --nav-bg: rgba(15, 23, 42, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Urbanist', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            display: block; /* Alterado para block para centralizar melhor */
+            width: 100%;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .highlight { color: var(--accent); }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent);
+        }
+
+        /* Mobile Menu Button */
+        .menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        /* --- HERO SECTION --- */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            padding-bottom: 50px; /* Adicionado padding bottom para evitar corte */
+            position: relative;
+            overflow: hidden;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .hero-text h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero-text h2 {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--accent);
+            color: var(--primary-bg);
+            border-radius: 50px;
+            font-weight: 700;
+            border: 2px solid var(--accent);
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--accent);
+        }
+
+        .hero-img {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-img img {
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 4/5; /* Mantém proporção consistente */
+            object-fit: cover;
+            border-radius: 30px;
+            box-shadow: 20px 20px 0px rgba(0, 230, 195, 0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+        }
+
+        .hero-img:hover img {
+            transform: translateY(-10px);
+        }
+
+        /* --- ABOUT SECTION --- */
+        #about {
+            padding: 100px 0;
+            background: var(--card-bg);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .about-card {
+            background: var(--primary-bg);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+
+        .about-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .about-card i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .about-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        /* --- TIMELINE (SICOOB) --- */
+        #projects {
+            padding: 100px 0;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Linha central Desktop */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background: rgba(255,255,255,0.1);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+
+        /* Bolinha da timeline */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-bg);
+            border: 4px solid var(--accent);
+            top: 25px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .left { left: 0; }
+        .right { left: 50%; }
+
+        .left::after { right: -10px; }
+        .right::after { left: -10px; }
+
+        .timeline-content {
+            padding: 25px 30px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            transition: 0.3s;
+        }
+        
+        .timeline-content:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
+        }
+
+        .year-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--primary-bg);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        /* --- PERSONAL PROJECT --- */
+        #personal {
+            padding: 100px 0;
+            background: var(--card-bg);
+        }
+
+        .project-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .project-gallery {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 10px 10px 30px 10px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Custom Scrollbar for Gallery */
+        .project-gallery::-webkit-scrollbar {
+            height: 8px;
+        }
+        .project-gallery::-webkit-scrollbar-track {
+            background: var(--primary-bg);
+            border-radius: 4px;
+        }
+        .project-gallery::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        .project-img {
+            width: 200px; /* Largura fixa para manter consistência */
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.4s;
+            flex-shrink: 0;
+            scroll-snap-align: center;
+        }
+
+        .project-img:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .feature-list i {
+            color: var(--accent);
+            margin-right: 15px;
+            margin-top: 5px;
+        }
+
+        /* --- TECH STACK --- */
+        #skills {
+            padding: 100px 0;
+        }
+
+        .tech-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .tech-card {
+            background: var(--card-bg);
+            padding: 20px 30px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 130px; /* Tamanho fixo para melhor alinhamento */
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .tech-card:hover {
+            border-color: var(--accent);
+            background: rgba(0, 230, 195, 0.05);
+        }
+
+        .tech-card i {
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+
+        /* --- SOCIALS --- */
+        #contact {
+            padding: 80px 0;
+            background: linear-gradient(to top, #000 0%, var(--primary-bg) 100%);
+        }
+
+        .social-cards {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .social-card {
+            background: #fff;
+            color: var(--primary-bg);
+            padding: 20px;
+            border-radius: 16px;
+            width: 200px;
+            transition: transform 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .social-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .social-card img {
+            width: 150px;
+            height: 150px;
+            margin: 10px 0;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        .social-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        /* --- ANIMATIONS --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        
+        /* Tablets e Notebooks menores */
+        @media (max-width: 992px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+
+            .hero-text h1 { font-size: 3.5rem; }
+            .hero-text p { margin: 0 auto 30px auto; }
+            
+            .project-showcase {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Celulares */
+        @media (max-width: 768px) {
+            .section-title { font-size: 2rem; }
+            
+            /* Ajuste Navegação */
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: var(--card-bg);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: 0.3s;
+                border-top: 1px solid rgba(255,255,255,0.05);
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+
+            .menu-btn { display: block; }
+
+            /* Ajuste Timeline Mobile */
+            .timeline { max-width: 100%; }
+            .timeline::after { left: 30px; } /* Linha fixa na esquerda */
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 15px;
+            }
+            
+            /* Forçar todos os itens para a direita da linha */
+            .timeline-item.left, .timeline-item.right { left: 0; }
+            
+            .timeline-item::after {
+                left: 20px; /* Bolinha alinhada com a linha */
+                right: auto;
+            }
+            
+            .left::after, .right::after { left: 20px; }
+            
+            /* Ajuste Hero */
+            .hero-text h1 { font-size: 2.8rem; }
+            .hero-img img { max-width: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">Fernando<span class="highlight">Dias</span></div>
+            <div class="nav-links" id="navLinks">
+                <a href="#hero" onclick="toggleMenu()">Início</a>
+                <a href="#about" onclick="toggleMenu()">Sobre</a>
+                <a href="#projects" onclick="toggleMenu()">Sicoob</a>
+                <a href="#personal" onclick="toggleMenu()">Projetos</a>
+                <a href="#skills" onclick="toggleMenu()">Skills</a>
+                <a href="#contact" onclick="toggleMenu()">Contato</a>
+            </div>
+            <div class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container hero-content">
+            <div class="hero-text reveal">
+                <h2>Olá, eu sou</h2>
+                <h1>Fernando <span class="highlight">Dias</span></h1>
+                <p>Desenvolvedor Mobile Especialista no Sicoob e Professor Universitário apaixonado por tecnologia e educação.</p>
+                <a href="#contact" class="btn">Vamos Conectar</a>
+            </div>
+            <div class="hero-img reveal">
+                <!-- Usei o caminho local que você forneceu -->
+                <img src="img/foto_perfil.jpeg" alt="Fernando Dias">
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title reveal">Sobre Mim</h2>
+            <div class="about-grid">
+                <div class="about-card reveal">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <h3>Dev Mobile</h3>
+                    <p>Atuo no Sicoob desenvolvendo soluções escaláveis, focando em arquitetura limpa, segurança e alta performance para milhões de usuários.</p>
+                </div>
+                <div class="about-card reveal">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                    <h3>Professor</h3>
+                    <p>Leciono na graduação e pós-graduação (Ceub, IESB, IFB). Tenho o prazer de formar novos profissionais nas tecnologias mais demandadas.</p>
+                </div>
+                <div class="about-card reveal">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <h3>Especialista</h3>
+                    <p>Domínio em todo o ecossistema mobile: Android Nativo, iOS e Flutter. Transformo requisitos complexos em apps intuitivos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sicoob Projects (Timeline) -->
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title reveal">Trajetória no Sicoob</h2>
+            <div class="timeline">
+                
+                <div class="timeline-item left reveal">
+                    <div class="timeline-content">
+                        <span class="year-badge">2022</span>
+                        <h3>Arquitetura Flutter & Super App</h3>
+                        <p>Criação de arquitetura modular integrando Flutter ao nativo via Channels e Micro-frontends. Migração estratégica de legado WebView.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item right reveal">
+                    <div class="timeline-content">
+                        <span class="year-badge">2021</span>
+                        <h3>Reconhecimento Facial</h3>
+                        <p>Desenvolvimento de sistema de autenticação com Google Vision e Liveness check, aumentando drasticamente a segurança das transações.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item left reveal">
+                    <div class="timeline-content">
+                        <span class="year-badge">2019</span>
+                        <h3>Squad de Segurança</h3>
+                        <p>Implementação de criptografia avançada e proteção de dados sensíveis no app Android.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item right reveal">
+                    <div class="timeline-content">
+                        <span class="year-badge">2018</span>
+                        <h3>Sicoob Mapas</h3>
+                        <p>App criado do zero para georreferenciamento e medição de propriedades rurais para crédito agrícola.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item left reveal">
+                    <div class="timeline-content">
+                        <span class="year-badge">2017</span>
+                        <h3>Android Wear</h3>
+                        <p>Desenvolvimento pioneiro do aplicativo para smartwatches, expandindo o ecossistema Sicoob.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Personal Project -->
+    <section id="personal">
+        <div class="container">
+            <h2 class="section-title reveal">Projeto Pessoal</h2>
+            <div class="project-showcase reveal">
+                <div class="project-info">
+                    <h3>Revo Metas com Foco</h3>
+                    <p style="margin-bottom: 20px; color: var(--text-muted);">Um aplicativo idealizado para transformar sonhos em realidade através de uma metodologia de planejamento validada.</p>
+                    <ul class="feature-list">
+                        <li><i class="fa-solid fa-check"></i> Planejamento estratégico de objetivos</li>
+                        <li><i class="fa-solid fa-check"></i> Interface intuitiva (Dark/Light mode)</li>
+                        <li><i class="fa-solid fa-check"></i> Publicado e disponível nas lojas</li>
+                    </ul>
+                </div>
+                <div class="project-gallery">
+                    <!-- Usei os caminhos locais que você forneceu -->
+                    <img src="img/tela_1.png" alt="Revo Metas Tela 1" class="project-img">
+                    <img src="img/tela_2.png" alt="Revo Metas Tela 2" class="project-img">
+                    <img src="img/tela_3.png" alt="Revo Metas Tela 3" class="project-img">
+                    <img src="img/tela_4.png" alt="Revo Metas Tela 4" class="project-img">
+                    <img src="img/tela_5.png" alt="Revo Metas Tela 5" class="project-img">
+                    <img src="img/tela_6.png" alt="Revo Metas Tela 6" class="project-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills">
+        <div class="container">
+            <h2 class="section-title reveal">Tecnologias</h2>
+            <div class="tech-grid reveal">
+                <div class="tech-card"><i class="fa-brands fa-android"></i><span>Android</span></div>
+                <div class="tech-card"><i class="fa-brands fa-apple"></i><span>iOS</span></div>
+                <div class="tech-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" style="fill: var(--accent);">
+                        <path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.357zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.37z"/>
+                    </svg>
+                    <span>Flutter</span>
+                </div>
+                <div class="tech-card"><i class="fa-brands fa-java"></i><span>Java</span></div>
+                <div class="tech-card"><i class="fa-brands fa-js"></i><span>JavaScript</span></div>
+                <div class="tech-card"><i class="fa-brands fa-html5"></i><span>HTML5</span></div>
+                <div class="tech-card"><i class="fa-brands fa-css3-alt"></i><span>CSS3</span></div>
+                <div class="tech-card"><i class="fa-brands fa-vuejs"></i><span>Vue.js</span></div>
+                <div class="tech-card"><i class="fa-brands fa-angular"></i><span>Angular</span></div>
+                <div class="tech-card"><i class="fa-solid fa-server"></i><span>Rest API</span></div>
+                <div class="tech-card"><i class="fa-solid fa-database"></i><span>Database</span></div>
+                <div class="tech-card"><i class="fa-solid fa-fire"></i><span>Firebase</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / Footer -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title reveal">Redes Sociais</h2>
+            
+            <div class="social-cards reveal">
+                <a href="https://www.linkedin.com/in/fdiasbsb/" target="_blank" class="social-card">
+                    <div class="social-header">
+                        <i class="fa-brands fa-linkedin" style="color: #0077b5;"></i> LinkedIn
+                    </div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.linkedin.com/in/fdiasbsb/" alt="LinkedIn QR">
+                    <span style="font-size: 0.9rem; color: #555;">Conectar</span>
+                </a>
+
+                <a href="https://github.com/fernandodx/" target="_blank" class="social-card">
+                    <div class="social-header">
+                        <i class="fa-brands fa-github" style="color: #333;"></i> Github
+                    </div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://github.com/fernandodx/" alt="GitHub QR">
+                    <span style="font-size: 0.9rem; color: #555;">Ver Código</span>
+                </a>
+
+                <a href="https://www.youtube.com/@RevoMetasComFoco" target="_blank" class="social-card">
+                    <div class="social-header">
+                        <i class="fa-brands fa-youtube" style="color: #ff0000;"></i> YouTube
+                    </div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.youtube.com/@RevoMetasComFoco" alt="YouTube QR">
+                    <span style="font-size: 0.9rem; color: #555;">Inscrever-se</span>
+                </a>
+            </div>
+        </div>
+        <p style="margin-top: 50px; color: var(--text-muted); font-size: 0.9rem; text-align: center;">&copy; 2024 Fernando Dias. Todos os direitos reservados.</p>
+    </section>
+
+    <script>
+        // Menu Toggle para Mobile
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Scroll Reveal Animation
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", reveal);
+        // Trigger once on load
+        reveal();
+    </script>
+</body>
+</html>
